@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Données & Résultats · kyriosMICA · FONDATEUR</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --void:#02040A;--surface:#0A1020;--card:#0D1525;
+  --gold:#C9972A;--cyan:#22D3EE;--purple:#A78BFA;
+  --green:#22C55E;--red:#EF4444;--orange:#F97316;
+  --muted:#64748B;--dim:#334155;--text:#E2E8F0;
+  --border:rgba(255,255,255,.07);
+  --ff:'IBM Plex Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--void);color:var(--text);font-family:var(--ff);min-height:100vh;}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(201,151,42,.015) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(201,151,42,.015) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+header{
+  background:rgba(2,4,10,.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(201,151,42,.15);
+  padding:12px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:10;
+}
+.hdr-title{font-size:13px;font-weight:700;letter-spacing:.5px;}
+.hdr-title span{color:var(--gold);}
+.hdr-badge{
+  font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  padding:3px 10px;border-radius:2px;
+  background:rgba(201,151,42,.1);border:1px solid rgba(201,151,42,.3);
+  color:var(--gold);
+}
+.app{max-width:940px;margin:0 auto;padding:24px 16px;position:relative;z-index:1;}
+.section-title{
+  font-size:8px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px;margin-top:28px;
+  padding-bottom:8px;border-bottom:1px solid rgba(201,151,42,.15);
+  display:flex;align-items:center;gap:8px;
+}
+.section-title:first-child{margin-top:0;}
+.card{
+  background:var(--card);border-radius:8px;padding:16px;
+  border:1px solid var(--border);margin-bottom:12px;
+}
+.gene-header{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;margin-bottom:14px;
+}
+.gene-name{font-size:18px;font-weight:800;letter-spacing:.5px;}
+.gene-desc{font-size:10px;color:var(--muted);margin-top:2px;}
+.stats-row{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:10px;margin-bottom:14px;
+}
+.stat{
+  background:var(--surface);border-radius:6px;padding:10px 12px;
+  border:1px solid var(--border);
+}
+.stat-l{font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.stat-v{font-size:16px;font-weight:800;font-family:var(--ff);}
+
+.result-row{
+  display:flex;align-items:center;gap:10px;padding:8px 12px;
+  background:var(--surface);border-radius:6px;margin-bottom:6px;
+  border:1px solid var(--border);flex-wrap:wrap;
+}
+.rr-pos{color:var(--muted);font-size:11px;min-width:60px;}
+.rr-codon{color:var(--gold);font-weight:700;font-size:13px;min-width:40px;}
+.rr-rank{
+  padding:2px 8px;border-radius:3px;font-size:10px;font-weight:700;
+  font-family:var(--ff);
+}
+.rank-high{background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.2);}
+.rank-med {background:rgba(249,115,22,.12);color:#f97316;border:1px solid rgba(249,115,22,.2);}
+.rank-low {background:rgba(34,197,94,.12); color:#22c55e;border:1px solid rgba(34,197,94,.2);}
+.rr-eres{color:var(--muted);font-size:10px;}
+.rr-nu{color:var(--cyan);font-size:10px;}
+
+.delta-badge{
+  display:inline-block;padding:3px 10px;border-radius:3px;
+  font-size:10px;font-weight:700;font-family:var(--ff);
+  background:rgba(34,211,238,.1);color:var(--cyan);
+  border:1px solid rgba(34,211,238,.2);
+}
+
+.prediction-box{
+  background:rgba(239,68,68,.05);border-radius:8px;padding:14px 16px;
+  border:1px solid rgba(239,68,68,.15);margin-top:12px;
+}
+.pred-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#ef4444;margin-bottom:6px;}
+.pred-text{font-size:11px;color:var(--text);line-height:1.7;}
+
+.stat-panel{
+  background:rgba(34,211,238,.04);border-radius:6px;padding:12px;
+  border:1px solid rgba(34,211,238,.1);margin-top:10px;
+  font-size:10px;line-height:1.8;
+}
+
+footer{
+  text-align:center;padding:20px;
+  font-size:9px;letter-spacing:1px;color:var(--dim);
+  border-top:1px solid var(--border);margin-top:24px;
+}
+footer a{color:var(--cyan);text-decoration:none;}
+
+@media(max-width:600px){
+  .stats-row{grid-template-columns:1fr 1fr;}
+}
+</style>
+<!-- kyriosMICA shared assets (v3) -->
+<link rel="stylesheet" href="/assets/shared/brand.css">
+<link rel="stylesheet" href="/assets/shared/nav.css">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="alternate icon" href="/assets/favicon.ico">
+<meta name="description" content="Données & téléchargements · Jeux de données, constantes, tableaux de référence TQIM-Davoh. kyriosMICA." data-fr="Données & téléchargements · Jeux de données, constantes, tableaux de référence TQIM-Davoh. kyriosMICA." data-en="Data & downloads · Datasets, constants, reference tables for TQIM-Davoh. kyriosMICA."/>
+<link rel="canonical" href="https://kyriosmica.com/data/donnees.html"/>
+</head>
+<body>
+<div id="kyrios-nav"></div>
+
+
+<header>
+  <div>
+    <div class="hdr-title">kyrios<span>MICA</span> · Données &amp; Résultats</div>
+    <div style="font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:1px;">
+      Résultats exclusifs · TQIM-Davoh · Qudits-36
+    </div>
+  </div>
+  <div class="hdr-badge">🔐 FONDATEUR</div>
+</header>
+
+<div class="app">
+
+  <!-- ══════════════════════════════════════════
+       SARS-CoV-2 · Prédiction Pré-enregistrée
+  ══════════════════════════════════════════ -->
+  <div class="section-title">① SARS-CoV-2 · Spike Protein · Prédiction Pré-enregistrée</div>
+
+  <div class="card">
+    <div class="gene-header">
+      <div>
+        <div class="gene-name" style="color:var(--red);">SARS-CoV-2</div>
+        <div class="gene-desc">Protéine Spike · Sites de mutation futurs prédits</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:8px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;">Pré-enregistré</div>
+        <div style="font-size:10px;color:var(--muted);">Avril 2026 · kyriosMICA</div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-l">Mann-Whitney p</div>
+        <div class="stat-v" style="color:var(--red);">0.0002</div>
+      </div>
+      <div class="stat">
+        <div class="stat-l">Point-biserial r</div>
+        <div class="stat-v" style="color:var(--cyan);">−0.482</div>
+      </div>
+      <div class="stat">
+        <div class="stat-l">Sites rang ≤ 3</div>
+        <div class="stat-v" style="color:var(--red);">100% mutés</div>
+      </div>
+      <div class="stat">
+        <div class="stat-l">Rang muté vs stable</div>
+        <div class="stat-v" style="color:var(--gold);">3.96 / 4.67</div>
+      </div>
+    </div>
+
+    <div class="prediction-box">
+      <div class="pred-title">⚠ Prédiction Postulat de la Mutabilité · TQIM-Davoh</div>
+      <div class="pred-text">
+        Les codons avec rang MRK ≤ 3 dans la protéine Spike de SARS-CoV-2
+        sont prédits comme sites préférentiels de mutation dans les variants futurs.<br/><br/>
+        Validation sur variants connus (Alpha, Beta, Delta, Omicron) :
+        <strong style="color:var(--red);">100% des codons rang MRK = 3 ont muté.</strong><br/>
+        Aucun site stable (rang ≥ 5) n'a muté dans ces variants.
+      </div>
+    </div>
+
+    <div class="stat-panel">
+      <span style="color:var(--cyan);">GitHub horodatage :</span>
+      github.com/kyriosMICA/MICA-KERNEL · commit 9 avril 2026<br/>
+      <span style="color:var(--cyan);">Zenodo DOI :</span>
+      <a href="https://doi.org/10.5281/zenodo.19454825" target="_blank">10.5281/zenodo.19454825</a><br/>
+      <span style="color:var(--cyan);">API endpoint :</span>
+      POST api.kyriosmica.com/mutability
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       NR3C1 · Glucocorticoid Receptor
+  ══════════════════════════════════════════ -->
+  <div class="section-title">② NR3C1 · Glucocorticoid Receptor · Analyse Stress Chronique</div>
+
+  <div class="card">
+    <div class="gene-header">
+      <div>
+        <div class="gene-name" style="color:var(--purple);">NR3C1</div>
+        <div class="gene-desc">NM_000176.3 · 777 codons · CDS complet · pH 7.4 vs Stress</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:8px;letter-spacing:2px;color:var(--purple);text-transform:uppercase;">Analyse complète</div>
+        <div style="font-size:10px;color:var(--muted);">kyriosMICA · 2026</div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-l">Codons analysés</div>
+        <div class="stat-v" style="color:var(--cyan);">777</div>
+      </div>
+      <div class="stat">
+        <div class="stat-l">Rang MRK pH 7.4</div>
+        <div class="stat-v" style="color:var(--gold);">4.322</div>
+      </div>
+      <div class="stat">
+        <div class="stat-l">ΔRang Stress</div>
+        <div class="stat-v" style="color:var(--red);">+2.0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-l">Uniformité ΔRang</div>
+        <div class="stat-v" style="color:var(--green);">100%</div>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:12px;">
+      Résultat clé : le stress chronique (pH 6.8, T=310K) induit un décalage uniforme
+      ΔRang MRK = +2.0 sur l'ensemble des 777 codons du CDS NR3C1.
+      Ceci suggère une réorganisation conformationnelle globale du récepteur glucocorticoïde
+      sous conditions de stress, cohérente avec la littérature épigénétique.
+    </div>
+
+    <div style="background:var(--surface);border-radius:6px;padding:12px;border:1px solid var(--border);">
+      <div style="font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Conditions comparées</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="padding:8px;background:rgba(34,197,94,.06);border-radius:4px;border:1px solid rgba(34,197,94,.1);">
+          <div style="color:var(--green);font-size:9px;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Physiologique</div>
+          <div style="font-size:11px;">T = 310K · pH 7.4 · I = 0.15 mol/L</div>
+          <div style="color:var(--gold);font-size:12px;font-weight:700;margin-top:3px;">Rang MRK = 4.322</div>
+        </div>
+        <div style="padding:8px;background:rgba(239,68,68,.06);border-radius:4px;border:1px solid rgba(239,68,68,.1);">
+          <div style="color:var(--red);font-size:9px;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Stress Chronique</div>
+          <div style="font-size:11px;">T = 310K · pH 6.8 · I = 0.18 mol/L</div>
+          <div style="color:var(--red);font-size:12px;font-weight:700;margin-top:3px;">Rang MRK = 6.322 (+2.0)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-panel" style="margin-top:10px;">
+      <span style="color:var(--purple);">Collaboration :</span> Validé par Julien Boblique (Science 4.0, IJZAB, DOI: 10.23880/izab-16000673)<br/>
+      <span style="color:var(--purple);">Convergence :</span> Alignement avec la SET Theory de Boblique confirmé<br/>
+      <span style="color:var(--purple);">Séquence :</span> NCBI NM_000176.3 — vérifié nucléotide par nucléotide
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       BRCA1
+  ══════════════════════════════════════════ -->
+  <div class="section-title">③ BRCA1 · Breast Cancer Gene · In Silico Analysis</div>
+
+  <div class="card">
+    <div class="gene-header">
+      <div>
+        <div class="gene-name" style="color:var(--orange);">BRCA1</div>
+        <div class="gene-desc">Exon 2 fragment · Analyse conformationnelle Qudits-36</div>
+      </div>
+      <div>
+        <div style="font-size:8px;letter-spacing:2px;color:var(--orange);text-transform:uppercase;">En cours</div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-l">Fragments analysés</div>
+        <div class="stat-v" style="color:var(--cyan);">3</div>
+      </div>
+      <div class="stat">
+        <div class="stat-l">Sites HIGH détectés</div>
+        <div class="stat-v" style="color:var(--red);">7</div>
+      </div>
+      <div class="stat">
+        <div class="stat-l">Rang MRK moyen</div>
+        <div class="stat-v" style="color:var(--gold);">4.1</div>
+      </div>
+      <div class="stat">
+        <div class="stat-l">Statut</div>
+        <div class="stat-v" style="color:var(--orange);font-size:12px;">Phase 1</div>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:var(--muted);line-height:1.7;">
+      Analyse préliminaire sur fragments BRCA1. Les sites à rang MRK ≤ 3 corrèlent
+      avec des positions connues de variants pathogènes (ClinVar). Validation
+      expérimentale planifiée Phase 2 (Drude force field, 2027-2028).
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PDB Crystal Structures
+  ══════════════════════════════════════════ -->
+  <div class="section-title">④ Structures Cristallographiques · Validation PDB</div>
+
+  <div class="card">
+    <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:14px;">
+      4 structures haute résolution analysées. Les signatures MRK distinguent
+      la forme A-DNA de la forme B-DNA et les insulines à différents pH —
+      résultats invisibles au modèle quaternaire classique.
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="result-row" style="flex-direction:column;align-items:flex-start;">
+        <div style="color:var(--cyan);font-weight:700;font-size:12px;margin-bottom:4px;">PDB: 4EWZ</div>
+        <div style="font-size:10px;color:var(--muted);">B-DNA · pH 7.0 · résolution 1.2 Å</div>
+        <div class="delta-badge" style="margin-top:6px;">Rang MRK = 4.8 · Forme B</div>
+      </div>
+      <div class="result-row" style="flex-direction:column;align-items:flex-start;">
+        <div style="color:var(--orange);font-weight:700;font-size:12px;margin-bottom:4px;">PDB: 3I40</div>
+        <div style="font-size:10px;color:var(--muted);">A-DNA · pH 5.5 · résolution 1.4 Å</div>
+        <div class="delta-badge" style="margin-top:6px;">Rang MRK = 3.2 · Forme A</div>
+      </div>
+      <div class="result-row" style="flex-direction:column;align-items:flex-start;">
+        <div style="color:var(--green);font-weight:700;font-size:12px;margin-bottom:4px;">PDB: 1MSI</div>
+        <div style="font-size:10px;color:var(--muted);">Insuline · pH 7.4</div>
+        <div class="delta-badge" style="margin-top:6px;">Rang MRK = 5.1 · Stable</div>
+      </div>
+      <div class="result-row" style="flex-direction:column;align-items:flex-start;">
+        <div style="color:var(--red);font-weight:700;font-size:12px;margin-bottom:4px;">PDB: 1D65</div>
+        <div style="font-size:10px;color:var(--muted);">Insuline · pH 2.0</div>
+        <div class="delta-badge" style="margin-top:6px;">Rang MRK = 2.8 · Instable</div>
+      </div>
+    </div>
+
+    <div class="stat-panel" style="margin-top:12px;">
+      Résultat clé : ΔRang MRK = 2.3 entre forme B (pH 7.4) et forme A (pH 5.5) —
+      différence détectée uniquement par Qudits-36, invisible au modèle quaternaire classique.
+      Publié : <a href="https://doi.org/10.5281/zenodo.19454825" target="_blank">Zenodo DOI: 10.5281/zenodo.19454825</a>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       Roadmap Phase 2
+  ══════════════════════════════════════════ -->
+  <div class="section-title">⑤ Roadmap · Phase 2 (2027–2028)</div>
+  <div class="card">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="padding:12px;background:var(--surface);border-radius:6px;border:1px solid var(--border);">
+        <div style="color:var(--gold);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">Force Field</div>
+        <div style="font-size:12px;margin-bottom:4px;">Phase 1 : CHARMM36 (additive)</div>
+        <div style="font-size:12px;color:var(--cyan);">Phase 2 : Drude polarisable</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px;">Fidélité simulation améliorée · 2027</div>
+      </div>
+      <div style="padding:12px;background:var(--surface);border-radius:6px;border:1px solid var(--border);">
+        <div style="color:var(--gold);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">Collaboration</div>
+        <div style="font-size:12px;margin-bottom:4px;">Julien Boblique · SET Theory</div>
+        <div style="font-size:11px;color:var(--muted);">IJZAB · DOI: 10.23880/izab-16000673</div>
+        <div style="font-size:10px;color:var(--purple);margin-top:4px;">Co-publication Phase 2 planifiée</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Données Exclusives · kyriosMICA Research Institute · Bénin · © 2026 Cyrille Egnon DAVOH<br/>
+  MICA — Matrice d'Intrication Coordonnée par les Amplitudes · TQIM-Davoh · Qudits-36<br/>
+  <a href="https://api.kyriosmica.com" target="_blank">api.kyriosmica.com</a> ·
+  <a href="https://github.com/kyriosMICA/MICA-KERNEL" target="_blank">GitHub</a> ·
+  <a href="https://doi.org/10.5281/zenodo.19454825" target="_blank">Zenodo</a>
+</footer>
+
+<!-- kyriosMICA shared footer + scripts (v3) -->
+<div id="kyrios-footer"></div>
+<script src="/assets/shared/i18n.js"></script>
+<script src="/assets/shared/nav.js"></script>
+<script src="/assets/shared/footer.js"></script>
+</body>
+</html>
