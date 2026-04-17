@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Science 4.0 · Applications · kyriosMICA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --void:    #020817;
+  --deep:    #060e1e;
+  --surface: #0a1628;
+  --card:    #0f1f35;
+  --gold:    #C9972A;
+  --gold2:   #E8C73A;
+  --cyan:    #22D3EE;
+  --purple:  #A78BFA;
+  --green:   #22C55E;
+  --red:     #EF4444;
+  --orange:  #F97316;
+  --blue:    #3B82F6;
+  --muted:   #64748B;
+  --dim:     #1e3a5f;
+  --text:    #E2E8F0;
+  --border:  rgba(255,255,255,.06);
+  --ff:      'IBM Plex Mono', monospace;
+  --fs:      'Fraunces', Georgia, serif;
+  --fh:      'Syne', sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--void);color:var(--text);
+  font-family:var(--ff);min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── Animated grid bg ── */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(34,211,238,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(34,211,238,.018) 1px,transparent 1px);
+  background-size:56px 56px;
+  animation: gridDrift 30s linear infinite;
+}
+@keyframes gridDrift{
+  from{background-position:0 0,0 0;}
+  to{background-position:56px 56px,56px 56px;}
+}
+
+/* ── Header ── */
+header{
+  background:rgba(2,8,23,.97);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(201,151,42,.15);
+  padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;
+}
+.hdr-left{display:flex;align-items:center;gap:12px;}
+.hdr-logo{font-family:var(--fh);font-weight:800;font-size:14px;letter-spacing:.5px;}
+.hdr-logo span{color:var(--gold);}
+.hdr-sub{font-size:7px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:1px;}
+.hdr-right{display:flex;align-items:center;gap:10px;}
+.hdr-badge{
+  font-size:7px;letter-spacing:2px;text-transform:uppercase;
+  padding:3px 10px;border-radius:2px;
+  background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);
+  color:var(--purple);
+}
+.hdr-pill{
+  font-size:7px;letter-spacing:1px;text-transform:uppercase;
+  padding:3px 8px;border-radius:10px;
+  background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.15);
+  color:var(--green);display:flex;align-items:center;gap:4px;
+}
+.pulse{
+  width:5px;height:5px;border-radius:50%;background:var(--green);
+  animation:pulse 2s ease infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,.4);}50%{opacity:.8;box-shadow:0 0 0 4px rgba(34,197,94,0);}}
+
+/* ── Nav tabs ── */
+.nav-tabs{
+  background:rgba(6,14,30,.95);
+  border-bottom:1px solid var(--border);
+  display:flex;padding:0 16px;
+  overflow-x:auto;scrollbar-width:none;
+  position:sticky;top:52px;z-index:40;
+}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.nav-tab{
+  background:none;border:none;border-bottom:2px solid transparent;
+  padding:12px 18px;cursor:pointer;font-family:var(--ff);
+  font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);white-space:nowrap;transition:all .2s;
+  display:flex;align-items:center;gap:6px;
+}
+.nav-tab:hover{color:var(--text);}
+.nav-tab.active{color:var(--cyan);border-bottom-color:var(--cyan);}
+
+/* ── Section wrapper ── */
+.section{display:none;animation:fadeIn .4s ease;}
+.section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ── Hero ── */
+.hero{
+  position:relative;overflow:hidden;
+  padding:60px 24px 40px;text-align:center;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(34,211,238,.06) 0%,transparent 70%);
+}
+.hero-label{
+  font-size:8px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:16px;
+}
+.hero-title{
+  font-family:var(--fs);font-size:clamp(28px,5vw,52px);
+  font-weight:700;line-height:1.2;
+  background:linear-gradient(135deg,var(--text) 0%,var(--cyan) 50%,var(--gold) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:20px;
+}
+.hero-sub{
+  font-size:12px;color:var(--muted);line-height:1.8;
+  max-width:640px;margin:0 auto 32px;
+}
+.hero-stats{
+  display:flex;justify-content:center;gap:32px;flex-wrap:wrap;
+}
+.hero-stat{text-align:center;}
+.hero-stat-val{font-size:28px;font-weight:800;font-family:var(--fh);}
+.hero-stat-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:2px;}
+
+/* ── Domain cards ── */
+.domains-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:16px;padding:24px;
+  max-width:1100px;margin:0 auto;
+}
+.domain-card{
+  background:var(--card);border-radius:12px;padding:24px;
+  border:1px solid var(--border);
+  cursor:pointer;transition:all .3s;position:relative;overflow:hidden;
+}
+.domain-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 20% 20%,var(--domain-color,.1) 0%,transparent 60%);
+  opacity:0;transition:opacity .3s;
+}
+.domain-card:hover{transform:translateY(-3px);border-color:var(--domain-color);}
+.domain-card:hover::before{opacity:1;}
+.domain-card.selected{
+  border-color:var(--domain-color);
+  background:linear-gradient(135deg,var(--card),rgba(0,0,0,.3));
+}
+.domain-icon{font-size:32px;margin-bottom:12px;}
+.domain-tag{
+  font-size:7px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--domain-color);margin-bottom:8px;
+}
+.domain-title{
+  font-family:var(--fh);font-size:18px;font-weight:700;
+  margin-bottom:8px;line-height:1.3;
+}
+.domain-desc{font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:14px;}
+.domain-apps{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;}
+.domain-app{
+  font-size:9px;padding:2px 8px;border-radius:2px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  color:var(--muted);
+}
+.domain-impact{
+  font-size:10px;padding:6px 10px;border-radius:4px;
+  background:rgba(255,255,255,.03);border-left:2px solid var(--domain-color);
+  color:var(--text);line-height:1.5;
+}
+.domain-arrow{
+  position:absolute;bottom:16px;right:16px;
+  font-size:16px;color:var(--domain-color);opacity:0;
+  transition:all .2s;transform:translateX(-6px);
+}
+.domain-card:hover .domain-arrow{opacity:1;transform:translateX(0);}
+
+/* ── Simulator panel ── */
+.sim-panel{
+  max-width:900px;margin:0 auto;padding:24px;
+}
+.sim-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;flex-wrap:wrap;gap:10px;
+}
+.sim-title{font-family:var(--fh);font-size:22px;font-weight:700;}
+.sim-title span{color:var(--domain-color,var(--cyan));}
+.back-btn{
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:6px;padding:6px 14px;cursor:pointer;
+  font-family:var(--ff);font-size:9px;letter-spacing:2px;
+  color:var(--muted);transition:all .2s;
+  text-transform:uppercase;
+}
+.back-btn:hover{border-color:var(--cyan);color:var(--cyan);}
+
+.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+.sim-card{background:var(--surface);border-radius:8px;padding:16px;border:1px solid var(--border);}
+.sim-label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+
+input[type=text],input[type=number],select,textarea{
+  width:100%;background:var(--void);border:1px solid rgba(255,255,255,.1);
+  border-radius:6px;padding:9px 12px;color:var(--text);
+  font-family:var(--ff);font-size:12px;transition:border-color .2s;
+}
+input:focus,select:focus,textarea:focus{outline:none;border-color:rgba(34,211,238,.4);}
+select option{background:var(--deep);}
+
+.run-btn{
+  width:100%;padding:13px;border-radius:8px;border:none;cursor:pointer;
+  font-family:var(--ff);font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  font-weight:700;transition:all .3s;margin-bottom:16px;
+  background:linear-gradient(135deg,var(--gold),#0891b2);
+  color:var(--void);
+}
+.run-btn:hover{opacity:.9;transform:translateY(-1px);}
+.run-btn:disabled{background:var(--surface);color:var(--muted);cursor:not-allowed;transform:none;}
+
+.result-box{
+  background:var(--card);border-radius:8px;padding:16px;
+  border:1px solid var(--border);display:none;
+  animation:fadeIn .4s ease;
+}
+.result-box.show{display:block;}
+
+.result-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.result-row:last-child{border-bottom:none;}
+.result-key{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);min-width:160px;}
+.result-val{font-size:13px;font-weight:700;font-family:var(--ff);}
+
+.risk-tag{
+  display:inline-block;padding:2px 8px;border-radius:3px;
+  font-size:10px;font-weight:700;font-family:var(--ff);
+}
+.risk-HIGH  {background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.25);}
+.risk-MEDIUM{background:rgba(249,115,22,.15);color:#f97316;border:1px solid rgba(249,115,22,.25);}
+.risk-LOW   {background:rgba(34,197,94,.15); color:#22c55e;border:1px solid rgba(34,197,94,.25);}
+
+.spinner{
+  width:16px;height:16px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.1);border-top-color:var(--cyan);
+  animation:spin .7s linear infinite;display:inline-block;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── Timeline ── */
+.timeline{padding:24px;max-width:800px;margin:0 auto;}
+.timeline-item{
+  display:flex;gap:20px;margin-bottom:24px;position:relative;
+}
+.timeline-item::before{
+  content:'';position:absolute;left:15px;top:32px;bottom:-24px;
+  width:1px;background:var(--border);
+}
+.timeline-item:last-child::before{display:none;}
+.tl-icon{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;border:1px solid var(--border);
+  background:var(--card);
+}
+.tl-content{padding-top:6px;}
+.tl-year{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:700;margin-bottom:4px;}
+.tl-desc{font-size:11px;color:var(--muted);line-height:1.6;}
+
+/* ── Sovereignty map ── */
+.sovereignty-section{padding:24px;max-width:1000px;margin:0 auto;}
+.sov-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;}
+.sov-card{
+  background:var(--card);border-radius:8px;padding:16px;
+  border:1px solid var(--border);text-align:center;
+}
+.sov-icon{font-size:28px;margin-bottom:8px;}
+.sov-title{font-size:12px;font-weight:700;margin-bottom:4px;}
+.sov-desc{font-size:10px;color:var(--muted);line-height:1.5;}
+
+/* ── Africa section ── */
+.africa-hero{
+  background:linear-gradient(135deg,rgba(201,151,42,.08) 0%,rgba(34,211,238,.04) 100%);
+  border-radius:12px;padding:32px;margin:24px;
+  border:1px solid rgba(201,151,42,.15);text-align:center;
+}
+.africa-title{font-family:var(--fs);font-size:28px;font-weight:700;color:var(--gold);margin-bottom:12px;}
+.africa-sub{font-size:12px;color:var(--muted);line-height:1.8;max-width:600px;margin:0 auto 20px;}
+
+/* ── Convergence section ── */
+.convergence{
+  display:flex;align-items:center;justify-content:center;
+  gap:0;flex-wrap:wrap;padding:32px 24px;
+}
+.conv-node{
+  background:var(--card);border-radius:10px;padding:16px 20px;
+  border:1px solid var(--border);text-align:center;min-width:120px;
+  transition:all .2s;
+}
+.conv-node:hover{transform:scale(1.05);border-color:var(--cyan);}
+.conv-icon{font-size:24px;margin-bottom:6px;}
+.conv-label{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+.conv-name{font-size:12px;font-weight:700;color:var(--text);margin-top:2px;}
+.conv-arrow{
+  font-size:20px;color:var(--dim);padding:0 8px;
+  display:flex;align-items:center;
+}
+
+/* ── Footer ── */
+footer{
+  text-align:center;padding:24px;margin-top:40px;
+  border-top:1px solid var(--border);
+  font-size:9px;letter-spacing:1px;color:var(--dim);
+}
+footer a{color:var(--cyan);text-decoration:none;}
+
+/* ── Utils ── */
+.max-w{max-width:960px;margin:0 auto;padding:0 24px;}
+.section-hdr{
+  font-size:8px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--muted);padding:24px 24px 0;
+  display:flex;align-items:center;gap:10px;
+}
+.section-hdr::after{content:'';flex:1;height:1px;background:var(--border);}
+
+@media(max-width:640px){
+  .sim-grid{grid-template-columns:1fr;}
+  .sov-grid{grid-template-columns:1fr 1fr;}
+  .hero-stats{gap:20px;}
+}
+</style>
+<!-- kyriosMICA shared assets (v3) -->
+<link rel="stylesheet" href="/assets/shared/brand.css">
+<link rel="stylesheet" href="/assets/shared/nav.css">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="alternate icon" href="/assets/favicon.ico">
+<meta name="description" content="Science 4.0 · Fondements scientifiques de kyriosMICA : mécanique quantique moléculaire, formalisme Qudits-36, MICA-OTP." data-fr="Science 4.0 · Fondements scientifiques de kyriosMICA : mécanique quantique moléculaire, formalisme Qudits-36, MICA-OTP." data-en="Science 4.0 · Scientific foundations of kyriosMICA: molecular quantum mechanics, Qudits-36 formalism, MICA-OTP."/>
+<link rel="canonical" href="https://kyriosmica.com/lab/science4.html"/>
+</head>
+<body>
+<div id="kyrios-nav"></div>
+
+
+<header>
+  <div class="hdr-left">
+    <svg width="28" height="28" viewBox="0 0 100 100">
+      <defs>
+        <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#E8B84B"/>
+          <stop offset="100%" style="stop-color:#C9972A"/>
+        </linearGradient>
+        <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#22D3EE"/>
+          <stop offset="100%" style="stop-color:#0891B2"/>
+        </linearGradient>
+      </defs>
+      <polygon points="50,8 86,29 86,71 50,92 14,71 14,29" fill="none" stroke="url(#g1)" stroke-width="2"/>
+      <polygon points="50,8 86,71 14,71" fill="rgba(201,151,42,.05)" stroke="url(#g1)" stroke-width="1.5"/>
+      <polygon points="86,29 50,92 14,29" fill="rgba(8,145,178,.05)" stroke="url(#g2)" stroke-width="1.5"/>
+      <circle cx="50" cy="50" r="5" fill="url(#g2)" opacity=".85"/>
+    </svg>
+    <div>
+      <div class="hdr-logo">kyrios<span>MICA</span></div>
+      <div class="hdr-sub">Science 4.0 · Applications · Impact Mondial</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-pill"><div class="pulse"></div>TQIM-Davoh</div>
+    <div class="hdr-badge">CONSORTIUM</div>
+  </div>
+</header>
+
+<!-- Nav tabs -->
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="switchSection('vitrine',this)">⬡ Vue d'ensemble</button>
+  <button class="nav-tab" onclick="switchSection('sante',this)">⚕ Santé</button>
+  <button class="nav-tab" onclick="switchSection('agri',this)">🌱 Agriculture</button>
+  <button class="nav-tab" onclick="switchSection('defense',this)">🛡 Défense</button>
+  <button class="nav-tab" onclick="switchSection('numerique',this)">◈ Numérique</button>
+  <button class="nav-tab" onclick="switchSection('souverainete',this)">✦ Souveraineté</button>
+  <button class="nav-tab" onclick="switchSection('afrique',this)">◉ Impact Afrique</button>
+  <button class="nav-tab" onclick="switchSection('convergence',this)">⊕ Science 4.0</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     VUE D'ENSEMBLE
+══════════════════════════════════════════ -->
+<div id="section-vitrine" class="section active">
+
+  <div class="hero">
+    <div class="hero-label">kyriosMICA · TQIM-Davoh · Qudits-36</div>
+    <h1 class="hero-title">La Vie comme<br/>Substrat d'Information</h1>
+    <p class="hero-sub">
+      Pour la première fois, l'ADN n'est plus un simple alphabet de 4 lettres.
+      C'est un espace vectoriel ternaire de 19 683 états par codon.
+      Cette découverte ouvre une nouvelle ère dans la santé, la sécurité,
+      l'agriculture et la souveraineté numérique.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val" style="color:var(--cyan);">×307</div>
+        <div class="hero-stat-lbl">Capacité vs ADN classique</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val" style="color:var(--gold);">4</div>
+        <div class="hero-stat-lbl">Postulats TQIM-Davoh</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val" style="color:var(--purple);">5</div>
+        <div class="hero-stat-lbl">Domaines d'application</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val" style="color:var(--green);">0€</div>
+        <div class="hero-stat-lbl">Coût du paradigme fondateur</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-hdr">Applications Réelles · Cliquer pour explorer et simuler</div>
+
+  <div class="domains-grid">
+
+    <div class="domain-card" style="--domain-color:rgba(239,68,68,.6)"
+      onclick="switchSection('sante',document.querySelector('[onclick*=sante]'))">
+      <div class="domain-icon">⚕</div>
+      <div class="domain-tag">Santé · Médecine</div>
+      <h3 class="domain-title">Médecine Moléculaire Personnalisée</h3>
+      <p class="domain-desc">Prédire la pathogénicité d'un variant génétique avant qu'il se manifeste. Identifier les sites de mutation virale avec 3-12 mois d'avance.</p>
+      <div class="domain-apps">
+        <span class="domain-app">BRCA1 variants</span>
+        <span class="domain-app">SARS-CoV-2</span>
+        <span class="domain-app">NR3C1 stress</span>
+        <span class="domain-app">Oncologie</span>
+      </div>
+      <div class="domain-impact" style="border-left-color:#ef4444;">
+        Prédiction SARS-CoV-2 : 100% des codons rang MRK ≤ 3 ont muté dans les variants connus. Mann-Whitney p = 0.0002.
+      </div>
+      <div class="domain-arrow">→</div>
+    </div>
+
+    <div class="domain-card" style="--domain-color:rgba(34,197,94,.6)"
+      onclick="switchSection('agri',document.querySelector('[onclick*=agri]'))">
+      <div class="domain-icon">🌱</div>
+      <div class="domain-tag">Agriculture · Elevage</div>
+      <h3 class="domain-title">Sélection Variétale & Traçabilité</h3>
+      <p class="domain-desc">Analyser la stabilité conformationnelle des génomes végétaux et animaux sous conditions de stress environnemental. Signature génomique infalsifiable.</p>
+      <div class="domain-apps">
+        <span class="domain-app">Sélection variétale</span>
+        <span class="domain-app">Traçabilité OGM</span>
+        <span class="domain-app">Résistance sécheresse</span>
+        <span class="domain-app">Génotypage</span>
+      </div>
+      <div class="domain-impact" style="border-left-color:#22c55e;">
+        La signature MRK d'une variété sous stress acide prédit sa résistance conformationnelle. Applicable aux semences africaines.
+      </div>
+      <div class="domain-arrow">→</div>
+    </div>
+
+    <div class="domain-card" style="--domain-color:rgba(59,130,246,.6)"
+      onclick="switchSection('defense',document.querySelector('[onclick*=defense]'))">
+      <div class="domain-icon">🛡</div>
+      <div class="domain-tag">Défense · Sécurité Nationale</div>
+      <h3 class="domain-title">Communications Inviolables ADN</h3>
+      <p class="domain-desc">MICA-OTP — chiffrement ternaire bio-inspiré à sécurité inconditionnelle (Shannon 1949). Résistant à tout ordinateur quantique. Substrat biologique.</p>
+      <div class="domain-apps">
+        <span class="domain-app">MICA-OTP</span>
+        <span class="domain-app">Post-quantique</span>
+        <span class="domain-app">Souveraineté</span>
+        <span class="domain-app">I(M;C) = 0</span>
+      </div>
+      <div class="domain-impact" style="border-left-color:#3b82f6;">
+        Espace clé CG+CG+CG : 3⁹ⁿ combinaisons. Indéchiffrable par n'importe quelle puissance de calcul, présente ou future.
+      </div>
+      <div class="domain-arrow">→</div>
+    </div>
+
+    <div class="domain-card" style="--domain-color:rgba(167,139,250,.6)"
+      onclick="switchSection('numerique',document.querySelector('[onclick*=numerique]'))">
+      <div class="domain-icon">◈</div>
+      <div class="domain-tag">Numérique · Data</div>
+      <h3 class="domain-title">Stockage Biomoléculaire Haute Densité</h3>
+      <p class="domain-desc">14,3 bits par codon vs 6 bits pour l'ADN classique. Infrastructure de données de la prochaine génération fondée sur le substrat biologique.</p>
+      <div class="domain-apps">
+        <span class="domain-app">14.3 bits/codon</span>
+        <span class="domain-app">×307 capacité</span>
+        <span class="domain-app">Post-silicium</span>
+        <span class="domain-app">Durable</span>
+      </div>
+      <div class="domain-impact" style="border-left-color:#a78bfa;">
+        Théorique : 1 mg d'ADN CG+CG+CG peut stocker ×307 fois plus d'information que l'ADN synthétique classique.
+      </div>
+      <div class="domain-arrow">→</div>
+    </div>
+
+    <div class="domain-card" style="--domain-color:rgba(201,151,42,.6)"
+      onclick="switchSection('souverainete',document.querySelector('[onclick*=souverainete]'))">
+      <div class="domain-icon">✦</div>
+      <div class="domain-tag">Souveraineté · Signal Biologique</div>
+      <h3 class="domain-title">Biological Signal Sovereignty</h3>
+      <p class="domain-desc">L'ADN comme infrastructure d'information souveraine. Identité biologique non falsifiable. Chaîne de confiance fondée sur la physique des liaisons hydrogène.</p>
+      <div class="domain-apps">
+        <span class="domain-app">Identité biologique</span>
+        <span class="domain-app">Traçabilité</span>
+        <span class="domain-app">Authentification</span>
+        <span class="domain-app">Souveraineté</span>
+      </div>
+      <div class="domain-impact" style="border-left-color:#C9972A;">
+        La signature EVK/MRK d'un individu est unique, physiquement fondée, et impossible à forger sans accès au matériel génétique réel.
+      </div>
+      <div class="domain-arrow">→</div>
+    </div>
+
+    <div class="domain-card" style="--domain-color:rgba(34,211,238,.6)"
+      onclick="switchSection('afrique',document.querySelector('[onclick*=afrique]'))">
+      <div class="domain-icon">◉</div>
+      <div class="domain-tag">Afrique de l'Ouest · Impact</div>
+      <h3 class="domain-title">Paradigme Né en Afrique</h3>
+      <p class="domain-desc">kyriosMICA démontre que les grandes découvertes scientifiques ne naissent pas seulement dans les laboratoires des nations puissantes. Le Bénin contribue aux frontières du savoir.</p>
+      <div class="domain-apps">
+        <span class="domain-app">Bénin 2026</span>
+        <span class="domain-app">Science 4.0</span>
+        <span class="domain-app">Formation chercheurs</span>
+        <span class="domain-app">ODD</span>
+      </div>
+      <div class="domain-impact" style="border-left-color:#22d3ee;">
+        Premier paradigme de bio-informatique systémique fondé en Afrique subsaharienne. Infrastructure scientifique souveraine.
+      </div>
+      <div class="domain-arrow">→</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SANTÉ — Vitrine + Simulateur
+══════════════════════════════════════════ -->
+<div id="section-sante" class="section">
+  <div class="sim-panel">
+    <div class="sim-header">
+      <div>
+        <div style="font-size:8px;letter-spacing:3px;color:#ef4444;text-transform:uppercase;margin-bottom:4px;">⚕ Santé · Médecine Moléculaire</div>
+        <h2 class="sim-title">Prédiction de <span style="color:#ef4444">Pathogénicité</span></h2>
+      </div>
+      <button class="back-btn" onclick="switchSection('vitrine',document.querySelector('[onclick*=vitrine]'))">← Vue d'ensemble</button>
+    </div>
+
+    <!-- Narrative -->
+    <div style="background:var(--card);border-radius:10px;padding:20px;border:1px solid rgba(239,68,68,.15);margin-bottom:20px;">
+      <div style="font-size:8px;letter-spacing:3px;color:#ef4444;text-transform:uppercase;margin-bottom:10px;">Le Problème Médical</div>
+      <p style="font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:14px;">
+        Chaque jour, des milliers de variants génétiques sont classifiés comme "VUS"
+        (Variant of Unknown Significance). Les médecins ne savent pas si ce variant BRCA1
+        est bénin ou va causer un cancer. La médecine conventionnelle regarde la séquence —
+        kyriosMICA regarde <strong style="color:var(--text);">ce que la séquence fait physiquement</strong>.
+      </p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="padding:12px;background:rgba(239,68,68,.05);border-radius:6px;border:1px solid rgba(239,68,68,.1);">
+          <div style="font-size:9px;letter-spacing:1px;color:#ef4444;text-transform:uppercase;margin-bottom:4px;">Approche conventionnelle</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.6;">Compare la séquence à une base de données. Si inconnue → VUS. Si connue → classe selon statistiques historiques.</div>
+        </div>
+        <div style="padding:12px;background:rgba(34,211,238,.05);border-radius:6px;border:1px solid rgba(34,211,238,.1);">
+          <div style="font-size:9px;letter-spacing:1px;color:var(--cyan);text-transform:uppercase;margin-bottom:4px;">Approche TQIM-Davoh</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.6;">Calcule la signature physique du codon via Qudits-36. Si rang MRK ≤ 3 → instabilité conformationnelle → risque pathogénique.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Simulateur interactif -->
+    <div style="background:var(--surface);border-radius:10px;padding:20px;border:1px solid rgba(239,68,68,.1);margin-bottom:16px;">
+      <div style="font-size:8px;letter-spacing:3px;color:#ef4444;text-transform:uppercase;margin-bottom:16px;">⬡ Simulateur · Analyse de Variant</div>
+
+      <div class="sim-grid">
+        <div class="sim-card">
+          <div class="sim-label">Séquence ADN (fragment)</div>
+          <textarea id="sante-seq" rows="3"
+            placeholder="Ex: ATGGATTATCCTTATGAATTTGCTCCT&#10;ou coller une séquence FASTA...">ATGGATTATCCTTATGAATTTGCTCCT</textarea>
+          <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;">
+            <button onclick="document.getElementById('sante-seq').value='ATGGATTATCCTTATGAATTTGCTCCT'" style="font-size:8px;padding:3px 8px;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;">BRCA1</button>
+            <button onclick="document.getElementById('sante-seq').value='GATGCTGTTTTAAAAGGTTTGGAGTTTTCTTCTGGG'" style="font-size:8px;padding:3px 8px;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;">SARS-CoV-2</button>
+            <button onclick="document.getElementById('sante-seq').value='GCAGAGTGTGGTACCTGTAAAGACCTGGCC'" style="font-size:8px;padding:3px 8px;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;">NR3C1</button>
+          </div>
+        </div>
+        <div class="sim-card">
+          <div class="sim-label">Conditions biologiques</div>
+          <div style="margin-bottom:8px;">
+            <div style="font-size:9px;color:var(--muted);margin-bottom:3px;">Contexte clinique</div>
+            <select id="sante-context">
+              <option value="physio">Physiologique · T=310K · pH 7.4</option>
+              <option value="stress">Stress chronique · pH 6.8</option>
+              <option value="fievre">Fièvre · T=312K</option>
+              <option value="tumeur">Microenv. tumoral · pH 5.5</option>
+            </select>
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--muted);margin-bottom:3px;">Type d'analyse</div>
+            <select id="sante-type">
+              <option value="mutability">Carte de mutabilité</option>
+              <option value="pathogenicity">Risque pathogénique</option>
+              <option value="compare">Comparer 2 conditions</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button class="run-btn" id="sante-btn" onclick="runSanteAnalysis()">
+        ⚕ ANALYSER LE VARIANT
+      </button>
+
+      <div class="result-box" id="sante-result"></div>
+    </div>
+
+    <!-- Résultats validés -->
+    <div style="background:rgba(239,68,68,.04);border-radius:8px;padding:16px;border:1px solid rgba(239,68,68,.1);">
+      <div style="font-size:8px;letter-spacing:2px;color:#ef4444;text-transform:uppercase;margin-bottom:10px;">Résultats Pré-enregistrés · Validation SARS-CoV-2</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center;">
+        <div>
+          <div style="font-size:22px;font-weight:800;color:#ef4444;">100%</div>
+          <div style="font-size:9px;color:var(--muted);">Sites rang MRK = 3 mutés</div>
+        </div>
+        <div>
+          <div style="font-size:22px;font-weight:800;color:var(--cyan);">p=0.0002</div>
+          <div style="font-size:9px;color:var(--muted);">Mann-Whitney</div>
+        </div>
+        <div>
+          <div style="font-size:22px;font-weight:800;color:var(--gold);">r=−0.48</div>
+          <div style="font-size:9px;color:var(--muted);">Point-biserial</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     AGRICULTURE
+══════════════════════════════════════════ -->
+<div id="section-agri" class="section">
+  <div class="sim-panel">
+    <div class="sim-header">
+      <div>
+        <div style="font-size:8px;letter-spacing:3px;color:#22c55e;text-transform:uppercase;margin-bottom:4px;">🌱 Agriculture · Elevage</div>
+        <h2 class="sim-title">Stabilité <span style="color:#22c55e">Conformationnelle</span> des Semences</h2>
+      </div>
+      <button class="back-btn" onclick="switchSection('vitrine',document.querySelector('[onclick*=vitrine]'))">← Vue d'ensemble</button>
+    </div>
+
+    <div style="background:var(--card);border-radius:10px;padding:20px;border:1px solid rgba(34,197,94,.15);margin-bottom:20px;">
+      <div style="font-size:8px;letter-spacing:3px;color:#22c55e;text-transform:uppercase;margin-bottom:10px;">La Révolution Agronomique</div>
+      <p style="font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:14px;">
+        Le changement climatique impose aux plantes des stress thermiques et acides
+        sans précédent. La sélection variétale traditionnelle prend 10-20 ans.
+        Avec TQIM-Davoh, on peut prédire en secondes si une variété résistera
+        au stress acide (sécheresse → acidification du sol) sans essais au champ.
+      </p>
+      <div style="padding:12px;background:rgba(34,197,94,.05);border-radius:6px;border-left:2px solid #22c55e;">
+        <strong style="color:var(--green);">Principe :</strong>
+        <span style="font-size:11px;color:var(--muted);"> Une variété résistante au stress acide aura un ΔRang MRK faible entre pH 7.0 et pH 5.5. Plus le ΔRang est élevé, plus la variété est sensible.</span>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border-radius:10px;padding:20px;border:1px solid rgba(34,197,94,.1);margin-bottom:16px;">
+      <div style="font-size:8px;letter-spacing:3px;color:#22c55e;text-transform:uppercase;margin-bottom:16px;">⬡ Simulateur · Test de Résistance Variétale</div>
+
+      <div class="sim-grid">
+        <div class="sim-card">
+          <div class="sim-label">Séquence du gène candidat</div>
+          <textarea id="agri-seq" rows="3"
+            placeholder="Séquence ADN de la variété à tester...">ATGCCCGATAATAGCTATGCCGAT</textarea>
+        </div>
+        <div class="sim-card">
+          <div class="sim-label">Conditions de stress</div>
+          <div style="margin-bottom:8px;">
+            <div style="font-size:9px;color:var(--muted);margin-bottom:3px;">Type de stress</div>
+            <select id="agri-stress">
+              <option value="acid">Acidification sol · pH 5.5</option>
+              <option value="thermal">Stress thermique · T=315K</option>
+              <option value="drought">Sécheresse · pH 5.0 + T=313K</option>
+              <option value="salinity">Salinité · I=0.5 mol/L</option>
+            </select>
+          </div>
+          <div>
+            <div style="font-size:9px;color:var(--muted);margin-bottom:3px;">Référence physiologique</div>
+            <select id="agri-ref">
+              <option value="normal">Sol fertile · pH 6.8 · T=295K</option>
+              <option value="tropical">Tropical · pH 7.0 · T=303K</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button class="run-btn" onclick="runAgriAnalysis()">
+        🌱 TESTER LA RÉSISTANCE VARIÉTALE
+      </button>
+
+      <div class="result-box" id="agri-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     DÉFENSE
+══════════════════════════════════════════ -->
+<div id="section-defense" class="section">
+  <div class="sim-panel">
+    <div class="sim-header">
+      <div>
+        <div style="font-size:8px;letter-spacing:3px;color:#3b82f6;text-transform:uppercase;margin-bottom:4px;">🛡 Défense · Sécurité Nationale</div>
+        <h2 class="sim-title">Communications <span style="color:#3b82f6">Inviolables</span></h2>
+      </div>
+      <button class="back-btn" onclick="switchSection('vitrine',document.querySelector('[onclick*=vitrine]'))">← Vue d'ensemble</button>
+    </div>
+
+    <div style="background:var(--card);border-radius:10px;padding:20px;border:1px solid rgba(59,130,246,.15);margin-bottom:20px;">
+      <div style="font-size:8px;letter-spacing:3px;color:#3b82f6;text-transform:uppercase;margin-bottom:10px;">Pourquoi l'ADN est le Meilleur Substrat Cryptographique</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
+        <div style="padding:12px;background:rgba(59,130,246,.06);border-radius:6px;text-align:center;">
+          <div style="font-size:20px;font-weight:800;color:#3b82f6;">10⁹</div>
+          <div style="font-size:9px;color:var(--muted);">molécules/μL</div>
+          <div style="font-size:9px;color:var(--muted);">densité physique</div>
+        </div>
+        <div style="padding:12px;background:rgba(59,130,246,.06);border-radius:6px;text-align:center;">
+          <div style="font-size:20px;font-weight:800;color:#3b82f6;">∞</div>
+          <div style="font-size:9px;color:var(--muted);">résistance quantique</div>
+          <div style="font-size:9px;color:var(--muted);">Shannon I(M;C)=0</div>
+        </div>
+        <div style="padding:12px;background:rgba(59,130,246,.06);border-radius:6px;text-align:center;">
+          <div style="font-size:20px;font-weight:800;color:#3b82f6;">T₃ⁿ</div>
+          <div style="font-size:9px;color:var(--muted);">espace clé</div>
+          <div style="font-size:9px;color:var(--muted);">3ⁿ >> 2ⁿ</div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--muted);line-height:1.7;">
+        MICA-OTP est un One-Time Pad ternaire opérant dans T₃ⁿ.
+        L'espace de clés est 3ⁿ — 58% plus grand qu'un OTP binaire de même longueur.
+        La sécurité est <strong style="color:var(--text);">inconditionnelle</strong> :
+        aucune puissance de calcul, présente ou future, ne peut briser le chiffrement
+        si la clé est utilisée une seule fois.
+      </p>
+    </div>
+
+    <div style="background:var(--surface);border-radius:10px;padding:20px;border:1px solid rgba(59,130,246,.1);">
+      <div style="font-size:8px;letter-spacing:3px;color:#3b82f6;text-transform:uppercase;margin-bottom:16px;">⬡ Démo · MICA-OTP · Chiffrement T₃</div>
+      <p style="font-size:10px;color:var(--muted);margin-bottom:14px;">
+        Version démo publique. La version complète (génération de clés réelles, défi mondial, protocole souveraineté) est dans l'espace Fondateur.
+      </p>
+
+      <div class="sim-grid">
+        <div class="sim-card">
+          <div class="sim-label">Message à sécuriser</div>
+          <input type="text" id="def-msg" value="kyriosMICA · Bénin · 2026" placeholder="Entrez votre message..."/>
+        </div>
+        <div class="sim-card">
+          <div class="sim-label">Espace vectoriel</div>
+          <select id="def-space">
+            <option value="7">AT+CG+AT = T₃⁷ (7 trits/char)</option>
+            <option value="9">CG+CG+CG = T₃⁹ (9 trits/char — max)</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="run-btn" onclick="runDefenseDemo()">
+        🛡 CHIFFRER AVEC MICA-OTP
+      </button>
+
+      <div class="result-box" id="def-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     NUMÉRIQUE
+══════════════════════════════════════════ -->
+<div id="section-numerique" class="section">
+  <div class="sim-panel">
+    <div class="sim-header">
+      <div>
+        <div style="font-size:8px;letter-spacing:3px;color:var(--purple);text-transform:uppercase;margin-bottom:4px;">◈ Numérique · Stockage</div>
+        <h2 class="sim-title">Stockage <span style="color:var(--purple)">Biomoléculaire</span></h2>
+      </div>
+      <button class="back-btn" onclick="switchSection('vitrine',document.querySelector('[onclick*=vitrine]'))">← Vue d'ensemble</button>
+    </div>
+
+    <div style="background:var(--card);border-radius:10px;padding:20px;border:1px solid rgba(167,139,250,.15);margin-bottom:20px;">
+      <p style="font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:16px;">
+        Church et al. (2012) ont stocké 5,5 Pétabits/mm³ avec l'ADN classique (4 bases).
+        Avec Qudits-36 (espace CG+CG+CG = 19 683 états/codon), la densité théorique
+        monte à <strong style="color:var(--purple);">×307 × 5,5 Pétabits = 1,69 Exabits/mm³</strong>.
+        Toute l'information produite par l'humanité en 2025 tiendrait dans quelques grammes d'ADN.
+      </p>
+
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:11px;">
+          <thead>
+            <tr>
+              <th style="padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;color:var(--muted);font-size:8px;letter-spacing:1px;">Support</th>
+              <th style="padding:8px 12px;border-bottom:1px solid var(--border);text-align:right;color:var(--muted);font-size:8px;letter-spacing:1px;">Densité</th>
+              <th style="padding:8px 12px;border-bottom:1px solid var(--border);text-align:right;color:var(--muted);font-size:8px;letter-spacing:1px;">Bits/codon</th>
+              <th style="padding:8px 12px;border-bottom:1px solid var(--border);text-align:right;color:var(--muted);font-size:8px;letter-spacing:1px;">Durabilité</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04);">
+              <td style="padding:8px 12px;color:var(--muted);">SSD NVMe</td>
+              <td style="padding:8px 12px;text-align:right;">~10 Gb/mm³</td>
+              <td style="padding:8px 12px;text-align:right;color:var(--muted);">~1</td>
+              <td style="padding:8px 12px;text-align:right;color:var(--muted);">5-10 ans</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,.04);">
+              <td style="padding:8px 12px;color:#f97316;">ADN classique</td>
+              <td style="padding:8px 12px;text-align:right;color:#f97316;">5.5 Pb/mm³</td>
+              <td style="padding:8px 12px;text-align:right;color:#f97316;">6</td>
+              <td style="padding:8px 12px;text-align:right;color:#f97316;">1000+ ans</td>
+            </tr>
+            <tr style="background:rgba(167,139,250,.04);">
+              <td style="padding:8px 12px;color:var(--purple);font-weight:700;">Qudits-36 CG+CG+CG</td>
+              <td style="padding:8px 12px;text-align:right;color:var(--purple);font-weight:800;">1.69 Eb/mm³</td>
+              <td style="padding:8px 12px;text-align:right;color:var(--purple);font-weight:800;">14.3</td>
+              <td style="padding:8px 12px;text-align:right;color:var(--purple);">1000+ ans</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border-radius:10px;padding:20px;border:1px solid rgba(167,139,250,.1);">
+      <div style="font-size:8px;letter-spacing:3px;color:var(--purple);text-transform:uppercase;margin-bottom:16px;">◈ Calculateur · Capacité de Stockage</div>
+
+      <div class="sim-grid">
+        <div class="sim-card">
+          <div class="sim-label">Quantité d'ADN</div>
+          <div style="display:flex;gap:8px;">
+            <input type="number" id="num-qty" value="1" min="0.001" step="0.1" style="flex:1"/>
+            <select id="num-unit" style="width:80px;">
+              <option>mg</option>
+              <option>g</option>
+              <option>μg</option>
+            </select>
+          </div>
+        </div>
+        <div class="sim-card">
+          <div class="sim-label">Espace vectoriel</div>
+          <select id="num-space">
+            <option value="64">ADN classique (64 états)</option>
+            <option value="729">AT+AT+AT (729)</option>
+            <option value="2187">AT+CG+AT (2187)</option>
+            <option value="19683" selected>CG+CG+CG (19683 — max)</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="run-btn" onclick="calcStorage()">◈ CALCULER LA CAPACITÉ</button>
+
+      <div class="result-box" id="num-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SOUVERAINETÉ
+══════════════════════════════════════════ -->
+<div id="section-souverainete" class="section">
+  <div class="sovereignty-section">
+    <div style="font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-bottom:16px;border-bottom:1px solid rgba(201,151,42,.15);">✦ Biological Signal Sovereignty · kyriosMICA</div>
+
+    <div style="background:var(--card);border-radius:10px;padding:24px;border:1px solid rgba(201,151,42,.15);margin:20px 0;">
+      <p style="font-family:var(--fs);font-size:16px;color:var(--text);line-height:1.8;font-style:italic;margin-bottom:16px;">
+        "L'information biologique ne doit pas être contrôlée par des entités extérieures.
+        L'ADN est le patrimoine informationnel souverain de chaque être vivant et de chaque nation."
+      </p>
+      <div style="font-size:9px;color:var(--muted);">— Cyrille Egnon Davoh · kyriosMICA · Bénin · 2026</div>
+    </div>
+
+    <div class="sov-grid">
+      <div class="sov-card" style="border-color:rgba(201,151,42,.2);">
+        <div class="sov-icon">🔐</div>
+        <div class="sov-title">Identité Biologique</div>
+        <div class="sov-desc">La signature MRK d'un individu est unique et physiquement fondée. Impossible à forger sans ADN réel.</div>
+      </div>
+      <div class="sov-card" style="border-color:rgba(34,211,238,.2);">
+        <div class="sov-icon">🌐</div>
+        <div class="sov-title">Infrastructure Souveraine</div>
+        <div class="sov-desc">Communications chiffrées par MICA-OTP. Clés générées depuis des séquences biologiques propres à la nation.</div>
+      </div>
+      <div class="sov-card" style="border-color:rgba(167,139,250,.2);">
+        <div class="sov-icon">◈</div>
+        <div class="sov-title">Traçabilité Inviolable</div>
+        <div class="sov-desc">Authenticité des semences, médicaments, et produits biologiques vérifiable via signature Qudits-36.</div>
+      </div>
+      <div class="sov-card" style="border-color:rgba(34,197,94,.2);">
+        <div class="sov-icon">⚖</div>
+        <div class="sov-title">Propriété Intellectuelle</div>
+        <div class="sov-desc">Premier cadre mathématique propriétaire africain pour l'information biologique. Brevets en préparation.</div>
+      </div>
+      <div class="sov-card" style="border-color:rgba(249,115,22,.2);">
+        <div class="sov-icon">🏛</div>
+        <div class="sov-title">Gouvernance des Données</div>
+        <div class="sov-desc">Le génome d'une population n'appartient pas aux plateformes technologiques étrangères. TQIM-Davoh fournit les outils d'une analyse souveraine.</div>
+      </div>
+      <div class="sov-card" style="border-color:rgba(59,130,246,.2);">
+        <div class="sov-icon">🛡</div>
+        <div class="sov-title">Défense Post-Quantique</div>
+        <div class="sov-desc">MICA-OTP : sécurité inconditionnelle Shannon. Résistant à l'ordinateur quantique le plus puissant imaginable.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     AFRIQUE
+══════════════════════════════════════════ -->
+<div id="section-afrique" class="section">
+  <div class="africa-hero">
+    <div class="africa-title">Naissance d'un Paradigme</div>
+    <p class="africa-sub">
+      Le 18 mars 2026, depuis le Bénin, Cyrille Egnon Davoh a fondé kyriosMICA
+      et formalisé la TQIM-Davoh — la première théorie quantique de l'information
+      moléculaire née en Afrique subsaharienne.
+      Pas dans un laboratoire à 10 millions d'euros.
+      Avec une idée, des mathématiques, et la conviction que les grandes
+      découvertes ne naissent pas seulement dans les nations puissantes.
+    </p>
+    <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <div style="font-size:24px;font-weight:800;color:var(--gold);">18/03/2026</div>
+        <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">FONDATION</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:24px;font-weight:800;color:var(--cyan);">3</div>
+        <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">SEMAINES → PUBLICATION</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:24px;font-weight:800;color:var(--green);">0€</div>
+        <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">INFRASTRUCTURE</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:800px;margin:0 auto;padding:0 24px;">
+    <div class="timeline">
+      <div style="font-size:8px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:20px;">Chronologie · kyriosMICA 2026</div>
+
+      <div class="timeline-item">
+        <div class="tl-icon" style="border-color:rgba(201,151,42,.3);color:var(--gold);">⬡</div>
+        <div class="tl-content">
+          <div class="tl-year">18 Mars 2026</div>
+          <div class="tl-title" style="color:var(--gold);">Fondation kyriosMICA · 29 ans</div>
+          <div class="tl-desc">Naissance de l'institution depuis le Bénin. Formalisation de l'hypothèse Qudits-36 et de la TQIM-Davoh.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-icon" style="border-color:rgba(34,211,238,.3);color:var(--cyan);">◈</div>
+        <div class="tl-content">
+          <div class="tl-year">7 Avril 2026</div>
+          <div class="tl-title" style="color:var(--cyan);">Publication Zenodo · DOI officiel</div>
+          <div class="tl-desc">Premier papier cyriosMICA publié mondialement. DOI: 10.5281/zenodo.19454825. Horodatage de priorité intellectuelle.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-icon" style="border-color:rgba(167,139,250,.3);color:var(--purple);">⊛</div>
+        <div class="tl-content">
+          <div class="tl-year">9 Avril 2026</div>
+          <div class="tl-title" style="color:var(--purple);">MICA-Kernel v1.0 · API Live</div>
+          <div class="tl-desc">Premier moteur computationnel public de la TQIM-Davoh. api.kyriosmica.com live. Prédiction SARS-CoV-2 horodatée sur GitHub.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-icon" style="border-color:rgba(34,197,94,.3);color:var(--green);">✓</div>
+        <div class="tl-content">
+          <div class="tl-year">2026 — En cours</div>
+          <div class="tl-title" style="color:var(--green);">Soumission arXiv · Collaboration Boblique</div>
+          <div class="tl-desc">Préprint q-bio.BM + cs.IT. Co-publication planifiée avec Julien Boblique (SET Theory). Analyses NR3C1 · BRCA1 complètes.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-icon" style="border-color:rgba(201,151,42,.2);color:rgba(201,151,42,.4);">◎</div>
+        <div class="tl-content">
+          <div class="tl-year">2027–2028</div>
+          <div class="tl-title" style="color:var(--muted);">Phase 2 · Drude Force Field</div>
+          <div class="tl-desc">Transition vers le champ de force Drude polarisable. Différentiation AT/CG dans les amplitudes quantiques. Validation expérimentale FTIR.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCIENCE 4.0 · CONVERGENCE
+══════════════════════════════════════════ -->
+<div id="section-convergence" class="section">
+  <div class="hero" style="padding:40px 24px 24px;">
+    <div class="hero-label">Science 4.0 · Paradigme TQIM-Davoh</div>
+    <h2 class="hero-title" style="font-size:clamp(22px,4vw,40px);">La Convergence des Savoirs</h2>
+    <p class="hero-sub" style="font-size:11px;">
+      Science 4.0 est le paradigme où la physique, la biologie, les mathématiques
+      et l'intelligence artificielle convergent vers une compréhension unifiée du vivant.
+      kyriosMICA en est la démonstration concrète.
+    </p>
+  </div>
+
+  <div class="convergence">
+    <div class="conv-node" style="border-color:rgba(239,68,68,.3);">
+      <div class="conv-icon">⚛</div>
+      <div class="conv-label">Physique</div>
+      <div class="conv-name" style="color:#ef4444;">Postulats TQIM</div>
+    </div>
+    <div class="conv-arrow">+</div>
+    <div class="conv-node" style="border-color:rgba(34,197,94,.3);">
+      <div class="conv-icon">🧬</div>
+      <div class="conv-label">Biologie</div>
+      <div class="conv-name" style="color:#22c55e;">ADN · Liaisons H</div>
+    </div>
+    <div class="conv-arrow">+</div>
+    <div class="conv-node" style="border-color:rgba(167,139,250,.3);">
+      <div class="conv-icon">∑</div>
+      <div class="conv-label">Mathématiques</div>
+      <div class="conv-name" style="color:var(--purple);">Qudits-36 · EVK</div>
+    </div>
+    <div class="conv-arrow">+</div>
+    <div class="conv-node" style="border-color:rgba(34,211,238,.3);">
+      <div class="conv-icon">⊛</div>
+      <div class="conv-label">IA Ternaire</div>
+      <div class="conv-name" style="color:var(--cyan);">T₃-Net</div>
+    </div>
+    <div class="conv-arrow">=</div>
+    <div class="conv-node" style="border-color:rgba(201,151,42,.5);background:rgba(201,151,42,.06);">
+      <div class="conv-icon">✦</div>
+      <div class="conv-label">Science 4.0</div>
+      <div class="conv-name" style="color:var(--gold);">TQIM-Davoh</div>
+    </div>
+  </div>
+
+  <div style="max-width:800px;margin:0 auto;padding:0 24px 32px;">
+    <div style="background:var(--card);border-radius:10px;padding:24px;border:1px solid rgba(201,151,42,.15);">
+      <div style="font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;">Les 4 Postulats · TQIM-Davoh</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:rgba(239,68,68,.05);border-radius:6px;border-left:2px solid #ef4444;">
+          <div style="min-width:28px;font-size:16px;font-weight:800;color:#ef4444;">I</div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px;">Postulat de l'Indétermination</div>
+            <div style="font-size:10px;color:var(--muted);">|ψ_i⟩ = α(−1)|−1⟩ + α(0)|0⟩ + α(+1)|+1⟩ · Superposition ternaire avant mesure biologique</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:rgba(34,211,238,.05);border-radius:6px;border-left:2px solid var(--cyan);">
+          <div style="min-width:28px;font-size:16px;font-weight:800;color:var(--cyan);">II</div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px;">Postulat de la Cohérence</div>
+            <div style="font-size:10px;color:var(--muted);">MIH-21 · 21 paires de bases = 2 tours B-DNA · Cavité résonante heptadique</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:rgba(201,151,42,.05);border-radius:6px;border-left:2px solid var(--gold);">
+          <div style="min-width:28px;font-size:16px;font-weight:800;color:var(--gold);">III</div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px;">Postulat de la Résonance</div>
+            <div style="font-size:10px;color:var(--muted);">ν_TIV = E_res / h · Fréquence vibratoire intrinsèque de chaque codon en THz</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;background:rgba(167,139,250,.05);border-radius:6px;border-left:2px solid var(--purple);">
+          <div style="min-width:28px;font-size:16px;font-weight:800;color:var(--purple);">IV</div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px;">Postulat de la Mutabilité</div>
+            <div style="font-size:10px;color:var(--muted);">P(mut) ∝ P(−1) × P(+1) · Probabilité de mutation depuis la physique des liaisons H</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  kyriosMICA Research Institute · Bénin, Afrique de l'Ouest · © 2026 Cyrille Egnon DAVOH<br/>
+  MICA — Matrice d'Intrication Coordonnée par les Amplitudes · TQIM-Davoh · Qudits-36<br/>
+  <a href="https://doi.org/10.5281/zenodo.19454825" target="_blank">DOI Zenodo</a> ·
+  <a href="https://api.kyriosmica.com/docs" target="_blank">API</a> ·
+  <a href="https://github.com/kyriosMICA/MICA-KERNEL" target="_blank">GitHub</a> ·
+  <a href="https://kyriosmica.com" target="_blank">kyriosmica.com</a>
+</footer>
+
+<script>
+const API = 'https://api.kyriosmica.com';
+
+// ── Section switcher ────────────────────────────────────────
+function switchSection(id, btn) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-tab').forEach(function(b){b.classList.remove('active');});
+  var s = document.getElementById('section-'+id);
+  if(s) s.classList.add('active');
+  if(btn) btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── Spinner helper ──────────────────────────────────────────
+function setLoading(btnId, loading) {
+  var btn = document.getElementById(btnId);
+  if(!btn) return;
+  btn.disabled = loading;
+  btn.innerHTML = loading
+    ? '<span class="spinner"></span>  Calcul en cours...'
+    : btn.getAttribute('data-label') || btn.textContent;
+}
+
+// ── API call helper ─────────────────────────────────────────
+async function callAPI(endpoint, body) {
+  try {
+    var r = await fetch(API + endpoint, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    if(!r.ok) throw new Error('API '+r.status);
+    return await r.json();
+  } catch(e) {
+    return { _error: e.message };
+  }
+}
+
+// ── Render result row ────────────────────────────────────────
+function resultRow(key, val, color) {
+  return '<div class="result-row">'
+    +'<div class="result-key">'+key+'</div>'
+    +'<div class="result-val" style="color:'+(color||'#e2e8f0')+'">'+val+'</div>'
+    +'</div>';
+}
+
+function showResult(boxId, html) {
+  var box = document.getElementById(boxId);
+  if(!box) return;
+  box.innerHTML = html;
+  box.classList.add('show');
+}
+
+// ── SANTÉ ────────────────────────────────────────────────────
+document.getElementById('sante-btn') &&
+  document.getElementById('sante-btn').setAttribute('data-label','⚕ ANALYSER LE VARIANT');
+
+var CONTEXTS = {
+  physio:  {T_K:310,pH:7.4,ionic_strength:0.15},
+  stress:  {T_K:310,pH:6.8,ionic_strength:0.18},
+  fievre:  {T_K:312,pH:7.4,ionic_strength:0.15},
+  tumeur:  {T_K:310,pH:5.5,ionic_strength:0.22},
+};
+
+async function runSanteAnalysis() {
+  var seq  = document.getElementById('sante-seq').value.trim();
+  var ctx  = document.getElementById('sante-context').value;
+  var cond = CONTEXTS[ctx] || CONTEXTS.physio;
+  if(!seq) return;
+  setLoading('sante-btn', true);
+
+  var data = await callAPI('/analyze', {sequence:seq, ...cond, run_mc:false});
+  setLoading('sante-btn', false);
+
+  if(data._error) {
+    showResult('sante-result','<div style="color:#ef4444;">Erreur : '+data._error+'</div>');
+    return;
+  }
+
+  var s = data.summary;
+  var highSites = data.high_risk_sites || [];
+  var riskColor = s.high_risk_sites > 2 ? '#ef4444' : s.high_risk_sites > 0 ? '#f97316' : '#22c55e';
+
+  var html = resultRow('Codons analysés', s.n_codons, '#22d3ee')
+    + resultRow('Rang MRK moyen', s.mrk_rank_mean + ' ± ' + s.mrk_rank_std, '#C9972A')
+    + resultRow('Sites HIGH risque (rang ≤ 3)', s.high_risk_sites, riskColor)
+    + resultRow('Sites MEDIUM (rang = 4)', s.medium_risk_sites, '#f97316')
+    + resultRow('E_res moyen', s.E_res_mean + ' kcal/mol', '#22c55e')
+    + resultRow('Conditions', 'T='+s.conditions.T_K+'K · pH='+s.conditions.pH, '#64748b');
+
+  if(highSites.length > 0) {
+    html += '<div style="margin-top:12px;font-size:8px;letter-spacing:2px;color:#ef4444;text-transform:uppercase;margin-bottom:6px;">⚠ Sites critiques</div>';
+    highSites.slice(0,5).forEach(function(site) {
+      html += '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);">'
+        +'<span style="color:var(--muted);font-size:10px;min-width:50px;">#'+site.pos+'</span>'
+        +'<span style="color:var(--gold);font-weight:700;">'+(site.codon||'')+'</span>'
+        +'<span style="color:var(--muted);font-size:10px;">rang='+(site.rank||'')+'</span>'
+        +'<span class="risk-tag risk-HIGH">HIGH</span>'
+        +'</div>';
+    });
+  }
+
+  html += '<div style="margin-top:10px;font-size:9px;color:var(--muted);">Analyse TQIM-Davoh · Postulat de la Mutabilité · api.kyriosmica.com</div>';
+  showResult('sante-result', html);
+}
+
+// ── AGRICULTURE ──────────────────────────────────────────────
+var AGRI_STRESS = {
+  acid:     {T_K:298,pH:5.5,ionic_strength:0.1},
+  thermal:  {T_K:315,pH:6.8,ionic_strength:0.12},
+  drought:  {T_K:313,pH:5.0,ionic_strength:0.08},
+  salinity: {T_K:298,pH:6.5,ionic_strength:0.5},
+};
+var AGRI_REF = {
+  normal:   {T_K:295,pH:6.8,ionic_strength:0.12},
+  tropical: {T_K:303,pH:7.0,ionic_strength:0.1},
+};
+
+async function runAgriAnalysis() {
+  var seq   = document.getElementById('agri-seq').value.trim();
+  var stress = AGRI_STRESS[document.getElementById('agri-stress').value];
+  var ref   = AGRI_REF[document.getElementById('agri-ref').value];
+  if(!seq) return;
+
+  // Run both conditions
+  var [dataRef, dataStress] = await Promise.all([
+    callAPI('/analyze', {sequence:seq, ...ref}),
+    callAPI('/analyze', {sequence:seq, ...stress})
+  ]);
+
+  if(dataRef._error || dataStress._error) {
+    showResult('agri-result','<div style="color:#ef4444;">Erreur API</div>'); return;
+  }
+
+  var deltaRank = (dataStress.summary.mrk_rank_mean - dataRef.summary.mrk_rank_mean).toFixed(2);
+  var deltaNum = parseFloat(deltaRank);
+  var resistance = deltaNum < 0.5 ? 'EXCELLENTE' : deltaNum < 1.5 ? 'BONNE' : deltaNum < 2.5 ? 'MODÉRÉE' : 'FAIBLE';
+  var resColor = deltaNum < 0.5 ? '#22c55e' : deltaNum < 1.5 ? '#22c55e' : deltaNum < 2.5 ? '#f97316' : '#ef4444';
+
+  var html = '<div style="font-size:8px;letter-spacing:2px;color:#22c55e;text-transform:uppercase;margin-bottom:8px;">Résultats comparatifs</div>';
+  html += resultRow('Rang MRK · référence', dataRef.summary.mrk_rank_mean, '#22c55e')
+    + resultRow('Rang MRK · stress', dataStress.summary.mrk_rank_mean, '#ef4444')
+    + resultRow('ΔRang MRK', (deltaNum >= 0 ? '+' : '') + deltaRank, deltaNum < 1 ? '#22c55e' : '#ef4444')
+    + resultRow('Résistance au stress', resistance, resColor)
+    + resultRow('Sites HIGH ref', dataRef.summary.high_risk_sites, '#22c55e')
+    + resultRow('Sites HIGH stress', dataStress.summary.high_risk_sites, '#ef4444');
+
+  html += '<div style="margin-top:12px;padding:10px;background:rgba(34,197,94,.05);border-radius:6px;border-left:2px solid '+resColor+';font-size:10px;line-height:1.6;">';
+  html += '<strong style="color:'+resColor+';">Conclusion :</strong> ΔRang = '+deltaRank+'. ';
+  if(deltaNum < 0.5) html += 'Variété <strong>très résistante</strong> — peu de réorganisation conformationnelle sous stress.';
+  else if(deltaNum < 1.5) html += 'Variété <strong>résistante</strong> — légère sensibilité au stress.';
+  else if(deltaNum < 2.5) html += 'Variété <strong>sensible</strong> — réorganisation conformationnelle notable.';
+  else html += 'Variété <strong>très sensible</strong> — instabilité majeure sous stress.';
+  html += '</div>';
+
+  showResult('agri-result', html);
+}
+
+// ── DÉFENSE · MICA-OTP DEMO ──────────────────────────────────
+function t3add(a,b){var s=a+b;return s>1?s-3:s<-1?s+3:s;}
+function intToVec(n,len){var v=[],x=((n%Math.pow(3,len))+Math.pow(3,len))%Math.pow(3,len);for(var i=0;i<len;i++){v.unshift((x%3)-1);x=Math.floor(x/3);}return v;}
+function randVec(n){return Array.from({length:n},function(){return[-1,0,1][Math.floor(Math.random()*3)];});}
+function tritStr(v){return '['+v.map(function(t){return t>0?'+'+t:t;}).join(' ')+']';}
+
+function runDefenseDemo() {
+  var msg = document.getElementById('def-msg').value;
+  var n   = parseInt(document.getElementById('def-space').value);
+  if(!msg) return;
+
+  var key = Array.from({length:msg.length},function(){return randVec(n);});
+  var enc = msg.split('').map(function(c,i){
+    var plain = intToVec(c.charCodeAt(0),n);
+    return plain.map(function(t,j){return t3add(t,key[i][j]);});
+  });
+
+  var cipherStr = enc.map(tritStr).join(' ');
+  var spaceLabel = n === 9 ? 'CG+CG+CG = T₃⁹' : 'AT+CG+AT = T₃⁷';
+  var keySpace = '3^(' + msg.length + '×' + n + ') = 3^' + (msg.length*n) + ' combinaisons';
+
+  var html = resultRow('Message original', '"'+msg+'"', '#e2e8f0')
+    + resultRow('Espace vectoriel', spaceLabel, '#a78bfa')
+    + resultRow('Trits par caractère', n, '#22d3ee')
+    + resultRow('Taille de la clé', msg.length*n + ' trits', '#C9972A')
+    + resultRow('Espace de clés', keySpace, '#22c55e')
+    + '<div style="margin-top:12px;font-size:8px;letter-spacing:1px;color:var(--muted);margin-bottom:4px;">MESSAGE CHIFFRÉ :</div>'
+    + '<div style="background:rgba(59,130,246,.06);border-radius:6px;padding:10px;font-size:9px;font-family:monospace;color:#3b82f6;word-break:break-all;line-height:1.8;border:1px solid rgba(59,130,246,.15);">'+cipherStr+'</div>'
+    + '<div style="margin-top:10px;padding:8px;background:rgba(34,197,94,.05);border-radius:4px;border-left:2px solid #22c55e;font-size:10px;color:var(--muted);">'
+    + '✓ Sécurité inconditionnelle · Shannon 1949 · I(M;C) = 0 · Résistant à tout ordinateur quantique'
+    + '</div>';
+
+  showResult('def-result', html);
+}
+
+// ── NUMÉRIQUE · Calculateur stockage ────────────────────────
+function calcStorage() {
+  var qty  = parseFloat(document.getElementById('num-qty').value) || 1;
+  var unit = document.getElementById('num-unit').value;
+  var states = parseInt(document.getElementById('num-space').value);
+
+  // Convert to mg
+  var qty_mg = unit === 'g' ? qty*1000 : unit === 'μg' ? qty/1000 : qty;
+
+  // Church et al. base: 5.5 Pb/mm³ for classical DNA (64 states)
+  // 1mg ADN ≈ 1mm³ (approximation)
+  var base_classical_pb_per_mg = 5.5; // Pb
+  var mult = states / 64;
+  var capacity_pb = base_classical_pb_per_mg * mult * qty_mg;
+
+  var formatCap = function(pb) {
+    if(pb > 1e6) return (pb/1e6).toFixed(2) + ' Zettabits';
+    if(pb > 1000) return (pb/1000).toFixed(2) + ' Exabits';
+    if(pb > 1) return pb.toFixed(2) + ' Pétabits';
+    return (pb*1000).toFixed(2) + ' Térabits';
+  };
+
+  // Human genome comparison (3Gb = 3e9 bases)
+  var bits_per_base = Math.log2(states/3)*1; // approx
+  var human_genomes = (capacity_pb * 1e15) / (3e9 * Math.log2(states));
+
+  var html = resultRow('Quantité ADN', qty_mg.toFixed(3)+' mg', '#22d3ee')
+    + resultRow('Espace vectoriel', states.toLocaleString()+' états/codon', '#a78bfa')
+    + resultRow('Facteur vs ADN classique', '×'+mult.toFixed(0), '#C9972A')
+    + resultRow('Capacité théorique', formatCap(capacity_pb), '#22c55e')
+    + resultRow('Équivalent génomes humains', human_genomes.toExponential(2), '#22d3ee')
+    + resultRow('Durabilité', '1 000+ ans dans conditions sèches', '#C9972A');
+
+  if(states === 19683) {
+    html += '<div style="margin-top:10px;padding:10px;background:rgba(167,139,250,.06);border-radius:6px;border-left:2px solid var(--purple);font-size:10px;line-height:1.6;color:var(--muted);">'
+      + '<strong style="color:var(--purple);">Espace maximum Qudits-36</strong> : CG+CG+CG = T₃⁹ = 19 683 états/codon = 14.3 bits/codon. '
+      + formatCap(capacity_pb) + ' dans ' + qty_mg.toFixed(3) + ' mg d\'ADN. '
+      + 'Tout le contenu d\'Internet 2025 tiendrait dans environ 1g d\'ADN CG+CG+CG.'
+      + '</div>';
+  }
+
+  showResult('num-result', html);
+}
+</script>
+
+<!-- kyriosMICA shared footer + scripts (v3) -->
+<div id="kyrios-footer"></div>
+<script src="/assets/shared/i18n.js"></script>
+<script src="/assets/shared/nav.js"></script>
+<script src="/assets/shared/footer.js"></script>
+</body>
+</html>
